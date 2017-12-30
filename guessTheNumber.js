@@ -36,14 +36,20 @@ function handleUserInput(userInput) {
 	let p_userInput = parseInt(userInput);
 	let diff = Math.abs(generatedNum - p_userInput);
 
-	if (p_userInput < generatedNum) {
-		console.log("You went lower");
+	if (generatedNum - p_userInput <= 10 && p_userInput < generatedNum) {
+		console.log("You were close but your guess it's lower");
+		promptUserInput();
+	} else if (p_userInput - generatedNum <= 10 && p_userInput > generatedNum) {
+		console.log("You were close but your guess it's higher");
+		promptUserInput();
+	} else if (p_userInput < generatedNum) {
+		console.log("Your guess is lower");
 		promptUserInput();
 	} else if (p_userInput > generatedNum) {
-		console.log("You went higher");
+		console.log("Your guess it's higher")
 		promptUserInput();
 	} else if (p_userInput === generatedNum) {
-		console.log("right!");
+		console.log("You got it!");
 		rl.close();
 	}
 }
