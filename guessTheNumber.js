@@ -16,15 +16,16 @@
 // Step 14: before prompting the user for their name at the beginning, load the previous high scores, and display them to the user. Note that winning from fewer guesses is better than winning from more guesses, so the entries with the fewer number of guesses should be higher on the highscore table than the entries with higher number of guesses.
 
 // Help for generating random integers between a minimum and maximum:
-let generatedNum = null;
+
+const readline = require('readline');
 
 function getRandomIntBetween(min, max) {
-	console.log("I've generated a new number from 1 to 100 and you must guess it!");
- 	generatedNum = Math.floor(min + (Math.random() * (max - min)));
+ 	return Math.floor(min + (Math.random() * (max - min)));
 }
 
+const generatedNum = getRandomIntBetween(1, 100);
+
 // Help for reading user input from the terminal:
-const readline = require('readline');
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -32,22 +33,27 @@ const rl = readline.createInterface({
 });
 
 function handleUserInput(userInput) {
-	if (userInput === generatedNum) {
-		console.log("that's right, nigga!")
-	} else if (userInput > generatedNum) {
-		console.log("It's higher nigga");
-	} else {
-		console.log("That's lower nigga");
+	let p_userInput = parseInt(userInput);
+	let diff = Math.abs(generatedNum - p_userInput);
+
+	if (p_userInput < generatedNum) {
+		console.log("You went lower");
+		promptUserInput();
+	} else if (p_userInput > generatedNum) {
+		console.log("You went higher");
+		promptUserInput();
+	} else if (p_userInput === generatedNum) {
+		console.log("right!");
+		rl.close();
 	}
-  //console.log(`Thank you for your valuable feedback: ${userInput}`);
-  rl.close();
 }
 
 function promptUserInput() {
   rl.question('Make a guess: ', handleUserInput);
 }
 
-getRandomIntBetween(1, 100);
+console.log("I've generated a new number from 1 to 100 and you must guess it!");
+console.log(generatedNum);
 promptUserInput();
 
 
