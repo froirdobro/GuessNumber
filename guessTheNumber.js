@@ -18,6 +18,7 @@
 // Help for generating random integers between a minimum and maximum:
 
 const readline = require('readline');
+let guessCounter = 0;
 
 function getRandomIntBetween(min, max) {
  	return Math.floor(min + (Math.random() * (max - min)));
@@ -34,7 +35,7 @@ const rl = readline.createInterface({
 
 function handleUserInput(userInput) {
 	let p_userInput = parseInt(userInput);
-	let diff = Math.abs(generatedNum - p_userInput);
+	let counter = 0;
 
 	if (generatedNum - p_userInput <= 10 && p_userInput < generatedNum) {
 		console.log("You were close but your guess it's lower");
@@ -49,13 +50,15 @@ function handleUserInput(userInput) {
 		console.log("Your guess it's higher")
 		promptUserInput();
 	} else if (p_userInput === generatedNum) {
-		console.log("You got it!");
+		console.log(`You got it in ${guessCounter} tries!`);
 		rl.close();
 	}
 }
 
 function promptUserInput() {
-  rl.question('Make a guess: ', handleUserInput);
+	console.log(`${guessCounter} tries so far`);
+ 	rl.question('Make a guess: ', handleUserInput);
+ 	guessCounter++;
 }
 
 console.log("I've generated a new number from 1 to 100 and you must guess it!");
