@@ -37,9 +37,15 @@ function handleUserInput(userInput) {
 	let p_userInput = parseInt(userInput);
 	let counter = 0;
 
+
 	if (userInput === "exit" || userInput === "quit" || userInput === "q") {
 		console.log(`The number you were looking for was ${generatedNum}`);
-		process.exit();
+		process.exit();	
+	//Cheat code
+	} else if (userInput === "help me") {
+		console.log(`The number you're looking for is between ${generatedNum-5} and ${generatedNum+5}`);
+		promptUserInput();
+	//Error handling
 	} else if (isNaN(userInput)) {
 		throw new Error("Invalid input");
 	}
