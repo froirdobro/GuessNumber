@@ -37,6 +37,9 @@ function handleUserInput(userInput) {
 	let p_userInput = parseInt(userInput);
 	let counter = 0;
 
+	if (isNaN(userInput)) {
+		throw new Error("Invalid input");
+	}
 	if (generatedNum - p_userInput <= 10 && p_userInput < generatedNum) {
 		console.log("You were close but your guess it's lower");
 		promptUserInput();
