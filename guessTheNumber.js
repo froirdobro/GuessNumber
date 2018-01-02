@@ -19,6 +19,9 @@
 
 const readline = require('readline');
 let guessCounter = 0;
+let Response = false;
+let getClose = false;
+let UserDetails = [];
 
 function getRandomIntBetween(min, max) {
  	return Math.floor(min + (Math.random() * (max - min)));
@@ -49,11 +52,17 @@ function handleUserInput(userInput) {
 	} else if (isNaN(userInput)) {
 		throw new Error("Invalid input");
 	}
+	//ask why it doesn't work when it's used in the "else if"
+	if (p_userInput === generatedNum) {
+		Response = true;
+	}
 
 	if (generatedNum - p_userInput <= 10 && p_userInput < generatedNum) {
+		getClose = true;
 		console.log("You were close but your guess it's lower");
 		promptUserInput();
 	} else if (p_userInput - generatedNum <= 10 && p_userInput > generatedNum) {
+		getClose = true;
 		console.log("You were close but your guess it's higher");
 		promptUserInput();
 	} else if (p_userInput < generatedNum) {
@@ -62,21 +71,75 @@ function handleUserInput(userInput) {
 	} else if (p_userInput > generatedNum) {
 		console.log("Your guess it's higher")
 		promptUserInput();
+	} else if (p_userInput === generatedNum && guessCounter === 1) {
+		console.log("You got it in the first try!");
+		rl.close();
 	} else if (p_userInput === generatedNum) {
-		console.log(`You got it in ${guessCounter} tries!`);
+		console.log(`you got it in ${guessCounter} tries!`);
 		rl.close();
 	}
+};
+
+function promptUserInfo() {
+	rl.question('Insert your name: ', handleUserInfo);
+}
+
+function handleUserInfo(input) {
+	UserDetails.push(input);
+	promptUserInput();
+	tauntUser();
 }
 
 function promptUserInput() {
-	console.log(`${guessCounter} tries so far`);
+	if (guessCounter === 0) {
+		console.log(generatedNum);
+		console.log("I've generated a new number from 1 to 100 and you must guess it!");
+	}
+
+	if (guessCounter === 1) {
+		console.log(`${guessCounter} try so far`);
+	}
+	else {
+		console.log(`${guessCounter} tries so far`);
+	}
  	rl.question('Make a guess: ', handleUserInput);
+
  	guessCounter++;
-}
+};
 
-console.log("I've generated a new number from 1 to 100 and you must guess it!");
-console.log(generatedNum);
-promptUserInput();
+function tauntUser() {
+	let rand = Math.random() * 10000;
+	let randClose = Math.random() * 100000 ;
 
+	let taunts = [
+		"It's taking you forever, right?",
+		"Still thinking?",
+		"It's been 84 years",
+		"Bruh"
+	]
 
-// Hint: use parseInt() to turn the user's guess from a string to an integer. parseInt() will return NaN if the user's input was not a valid integer. You can check for this using the isNaN() function. You cannot compare for equality with NaN, i.e. NaN !== NaN, but isNaN(NaN) === true.
+	const randTaunt = taunts[Math.floor(Math.random() * taunts.length)];
+
+	if (getClose === false) {
+		let t = setTimeout(function(){
+			console.log("\r");
+			console.log(randTaunt);
+			rl.question('Make a guess: ', handleUserInput);
+			tauntUser();
+		}, rand);
+	} else {
+		let t_close = setTimeout(function(){
+			console.log("\r");
+			console.log(randTaunt);
+			rl.question('Make a guess: ', handleUserInput);
+			tauntUser();
+		}, randClose);
+	}
+
+	if (Response === true) {
+		//clearTimeout(t); I'm not sure about this one
+		process.exit(); //nor this one lol
+	}
+};
+
+promptUserInfo();
